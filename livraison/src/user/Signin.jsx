@@ -1,11 +1,16 @@
-import signUpImg from '../../src/imgs/Sign up-cuate.png'
+import signInImg from '../../src/imgs/Sign in-pana.png'
 import axios from 'axios'
-// import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import Swal from 'sweetalert2'; // Import the main SweetAlert2 module
+import 'sweetalert2/dist/sweetalert2.min.css'; // Import the CSS file
+import 'sweetalert2/dist/sweetalert2.min.js'; // Import the JavaScript file
+
+import {Link} from 'react-router-dom'
 
 import { useState } from 'react'
  const Signin = () => {
-
-//   const history = useHistory();
+const navigate=useNavigate()
 
    const [user,setUser]=useState({
     email: '',
@@ -46,15 +51,21 @@ import { useState } from 'react'
             },
           })
             .then(res => {
-              // Handle the successful response here.
-              console.log(res.data);
+              console.log(res);
+              localStorage.setItem('jwt_token',JSON.stringify(res.data));
+
+              navigate('/'); // Redirect to the home page
+
             })
             .catch(error => {
-              // Handle any errors that occur during the request.
               console.error(error);
+              Swal.fire({
+                title: 'Failed Sign In ',
+                text: 'Try Again ',
+                icon: 'error',
+                confirmButtonText: 'Okey'
+              })
             });
-
-
    }
 
   return (
@@ -80,20 +91,20 @@ import { useState } from 'react'
                           </div>
                           <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                       </div>
-                      <a href="#" className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
+                      <Link to='/forgetpassword' className="ml-auto text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</Link>
                   </div>
                   <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Sign In</button>
                   <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
                       Not registered? <a href="#" className="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
                   </div>
 
-                  {JSON.stringify(user)}
+                  {/* {JSON.stringify(user)} */}
               </form>
           </div>
 
       </div>
       <div className="w-1/2">
-        <img src={signUpImg} alt="image" />
+        <img src={signInImg} alt="image" />
       </div>
    </div>
     </>
