@@ -5,11 +5,29 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2'; // Import the main SweetAlert2 module
 import 'sweetalert2/dist/sweetalert2.min.css'; // Import the CSS file
 import 'sweetalert2/dist/sweetalert2.min.js'; // Import the JavaScript file
+import { useForm } from "react-hook-form"
 
 import {Link} from 'react-router-dom'
 
 import { useState } from 'react'
  const Signin = () => {
+
+
+
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
+
+
+
+
+
+
+
+
 const navigate=useNavigate()
 
    const [user,setUser]=useState({
@@ -22,8 +40,7 @@ const navigate=useNavigate()
       setUser({...user,[e.target.id]:e.target.value})
 
    }
-   const submitSignIn=(e)=>{
-        e.preventDefault();
+   const submitSignIn = () => {
 
 
         // fetch('http://localhost:4000/api/users/signin',{
@@ -73,16 +90,19 @@ const navigate=useNavigate()
     <div className="container flex  mx-auto mt-6">
       <div className=" flex w-1/2 justify-center h-52 ">
           <div className="w-full max-w-sm p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-              <form onSubmit={submitSignIn} className="space-y-6" >
+              <form onSubmit={handleSubmit(submitSignIn)} className="space-y-6" >
                   <h5 className="text-xl font-medium text-gray-900 dark:text-white">Sign In to Marhaba</h5>
                  
                   <div>
                       <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                      <input onChange={handleChange}  type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required />
+                      <input   type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com"  {...register("email",{required: "Email is required",pattern: {value:/^\S+@\S+\.\S+$/,message: 'Invalid Email Address'}})} onChange={handleChange}  />
+                      {errors.email && (<small className='text-red-500'>{errors.email.message}</small>)}
                   </div>
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                      <input  onChange={handleChange} type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+                      <input  type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"  {...register("password",{required: "Password is required",minLength: {value: 6,message :"Min Length you need 6 caracters "},maxLength: {value: 15,message: "max Length is 15 caracters"}})} onChange={handleChange} />
+                      {errors.password && (<small className='text-red-500'>{errors.password.message}</small>)}
+
                   </div>
                   <div className="flex items-start">
                       <div className="flex items-start">

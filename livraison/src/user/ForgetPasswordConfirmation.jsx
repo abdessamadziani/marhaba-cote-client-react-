@@ -3,6 +3,7 @@ import {Link,useParams} from 'react-router-dom'
 import { useEffect } from 'react'
 import signinnImg from '../../src/imgs/signin.png'
 import flesh from '../../src/imgs/flesh.png'
+import { useForm, SubmitHandler } from "react-hook-form"
 
 
 import axios from 'axios'
@@ -14,6 +15,18 @@ import 'sweetalert2/dist/sweetalert2.min.js'; // Import the JavaScript file
 
 
 export const ForgetPasswordConfirmation = () => {
+
+
+
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors }
+  } = useForm()
+
+
 
 
     const [newpassword,setNewPassword]=useState()
@@ -45,8 +58,8 @@ export const ForgetPasswordConfirmation = () => {
     // }, []); 
 
 
-    const submitForgetPassword=(e)=>{
-        e.preventDefault();
+    const submitForgetPassword=()=>{
+        // e.preventDefault();
         axios.post(`http://localhost:4000/api/users/forgetpassword/${token}`,newpassword, {
             headers: {
               'Accept': 'application/json',
@@ -82,11 +95,13 @@ export const ForgetPasswordConfirmation = () => {
     {(!validUrl) &&
 
       
-              <form onSubmit={submitForgetPassword}   className="space-y-6" >
+              <form onSubmit={handleSubmit(submitForgetPassword)}   className="space-y-6" >
                   <h5 className="text-xl font-medium text-gray-900 dark:text-white">Type your new passowrd</h5>
                   <div>
                       <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your new password</label>
-                      <input   onChange={handleChange} type="password" name="newpassword" id="newpassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
+                      <input    type="password" name="newpassword" id="newpassword" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"  {...register("password",{required: "Password is required",minLength: {value: 6,message :"Min Length you need 6 caracters "},maxLength: {value: 15,message: "max Length is 15 caracters"}})} onChange={handleChange} />
+                      {errors.password && (<small className='text-red-500'>{errors.password.message}</small>)}
+
                   </div>
                  <div className='md:w-1/2'>
                    <button type="submit" className="w-1/3  text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Submit</button>
